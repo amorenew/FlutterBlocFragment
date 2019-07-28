@@ -1,0 +1,4 @@
+const FRAGMENT_1 = 'FRAGMENT_1';
+const FRAGMENT_2 = 'FRAGMENT_2';
+const FRAGMENT_3 = 'FRAGMENT_3';
+const FRAGMENT_4 = 'FRAGMENT_4';
