@@ -3,7 +3,6 @@ import 'package:fragment_bloc/fragment_bloc/fragment.dart';
 import 'package:fragment_bloc/fragment_bloc/fragment_state.dart';
 
 class FragmentManager {
-  int _currentIndex = 0;
   List<int> _backstack = [0];
 
   static final FragmentManager _singleton = new FragmentManager._internal();
@@ -18,9 +17,6 @@ class FragmentManager {
 
   void navigateTo(int index) {
     _backstack.add(index);
-    // setState(() {
-    //   _currentIndex = index;
-    // });
   }
 
   int navigateToName(String fragmentName) {
@@ -34,43 +30,20 @@ class FragmentManager {
     });
     print('manager navigateToName:$fragmentIndex');
     _backstack.add(fragmentIndex);
-    _currentIndex = fragmentIndex;
     return fragmentIndex;
-    // setState(() {
-    //   _currentIndex = index;
-    // });
   }
 
   int navigateBack() {
-    // setState(() {
-    return --_currentIndex;
-    // });
+    return _backstack.removeAt(_backstack.length - 1);
   }
-  // void navigateBack(int index) {
-  //   // setState(() {
-  //     _currentIndex = index;
-  //   // });
-  // }
 
   Future<bool> backPop() {
-    if(_currentIndex>0){
+    if (_backstack.length > 0) {
       return Future.value(false);
-    } else  {
+    } else {
       return Future.value(true);
     }
   }
-
-  // Future<bool> customPop(BuildContext context) {
-  //   print("CustomPop is called");
-  //   print("_backstack = $_backstack");
-  //   if (_backstack.length > 1) {
-  //     _backstack.removeAt(_backstack.length - 1);
-  //     navigateBack(_backstack[_backstack.length - 1]);
-  //     return Future.value(false);
-  //   } else {
-  //     return Future.value(true);
-  //   }
-  // }
 
   void setFragments(List<Widget> fragments) {
     _fragments = fragments;
