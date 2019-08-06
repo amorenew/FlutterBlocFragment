@@ -6,17 +6,20 @@ import './bloc.dart';
 class FragmentBloc extends Bloc<FragmentEvent, FragmentState> {
   @override
   FragmentState get initialState => FragmentInitialState();
-
   @override
   Stream<FragmentState> mapEventToState(
     FragmentEvent event,
   ) async* {
     if (event is FragmentNavigateEvent) {
-      int currentIndex = FragmentManager().navigateToName(event.routeName);
+      if (!FragmentManager().isExist(event.routeName)) {
+        FragmentManager().addFragment(event.routeName);
+      }
+      final int currentIndex =
+          FragmentManager().navigateToName(event.routeName);
       print('bloc currentIndex:$currentIndex');
       yield FragmentCurrentState(currentIndex);
     } else if (event is FragmentBackEvent) {
-      int currentIndex = FragmentManager().navigateBack();
+      final int currentIndex = FragmentManager().navigateBack();
       if (currentIndex < 0) {
         yield FragmentNoBackState();
       } else {

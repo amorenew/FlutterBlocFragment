@@ -1,34 +1,71 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fragment_bloc/fragment_bloc/fragment.dart';
-import 'package:fragment_bloc/fragment_bloc/fragment_state.dart';
 
 class FragmentManager {
-  int _currentIndex = 0;
-  List<int> _backstack = [0];
-
-  static final FragmentManager _singleton = new FragmentManager._internal();
 
   factory FragmentManager() {
     return _singleton;
   }
-
   FragmentManager._internal();
+
+  static final FragmentManager _singleton = FragmentManager._internal();
+
+  int _currentIndex = 0;
+  final List<int> _backstack = [0];
+
+  Map<String, Widget> _fragmentsMap = <String, Widget>{};
 
   List<Widget> _fragments = [];
 
+  void setRoutes(Map<String, Widget> fragmentsMap) {
+    _fragmentsMap = fragmentsMap;
+  }
+
+  Map<String, Widget> getRoutes() {
+    return _fragmentsMap;
+  }
+
+  void addFragment(String routeName) {
+    _fragments.add(getRoutes()[routeName]);
+  }
+
   void navigateTo(int index) {
     _backstack.add(index);
-    // setState(() {
-    //   _currentIndex = index;
-    // });
+  }
+
+  bool isExist(String fragmentName) {
+    bool exist = false;
+    _fragments.asMap().forEach((int index, Widget value) {
+      if (value is Fragment && value.getRouteName() == fragmentName) {
+        exist = true;
+      } else if (value is BlocProvider &&
+          value.child is Fragment &&
+          (value.child as Fragment).getRouteName() == fragmentName) {
+        exist = true;
+      } else if (value is MultiBlocProvider &&
+          value.child is Fragment &&
+          (value.child as Fragment).getRouteName() == fragmentName) {
+        exist = true;
+      }
+    });
+    return exist;
   }
 
   int navigateToName(String fragmentName) {
-    int fragmentIndex = 0;
+    int fragmentIndex = -1;
     print('manager navigateToName:$fragmentIndex');
 
     _fragments.asMap().forEach((int index, Widget value) {
-      if ((value as Fragment).getName() == fragmentName) {
+      if (value is Fragment && value.getRouteName() == fragmentName) {
+        fragmentIndex = index;
+      } else if (value is BlocProvider &&
+          value.child is Fragment &&
+          (value.child as Fragment).getRouteName() == fragmentName) {
+        fragmentIndex = index;
+      } else if (value is MultiBlocProvider &&
+          value.child is Fragment &&
+          (value.child as Fragment).getRouteName() == fragmentName) {
         fragmentIndex = index;
       }
     });
@@ -36,47 +73,27 @@ class FragmentManager {
     _backstack.add(fragmentIndex);
     _currentIndex = fragmentIndex;
     return fragmentIndex;
-    // setState(() {
-    //   _currentIndex = index;
-    // });
   }
 
   int navigateBack() {
-    // setState(() {
     return --_currentIndex;
-    // });
   }
-  // void navigateBack(int index) {
-  //   // setState(() {
-  //     _currentIndex = index;
-  //   // });
-  // }
 
   Future<bool> backPop() {
-    if(_currentIndex>0){
-      return Future.value(false);
-    } else  {
-      return Future.value(true);
+    if (_currentIndex > 0) {
+      return Future<bool>.value(false);
+    } else {
+      return Future<bool>.value(true);
     }
   }
 
-  // Future<bool> customPop(BuildContext context) {
-  //   print("CustomPop is called");
-  //   print("_backstack = $_backstack");
-  //   if (_backstack.length > 1) {
-  //     _backstack.removeAt(_backstack.length - 1);
-  //     navigateBack(_backstack[_backstack.length - 1]);
-  //     return Future.value(false);
-  //   } else {
-  //     return Future.value(true);
-  //   }
-  // }
 
   void setFragments(List<Widget> fragments) {
     _fragments = fragments;
   }
 
-  Fragment getCurrentFragment(int index) {
+  Widget getCurrentFragment(int index) {
+    if (_fragments.isEmpty) addFragment(getRoutes().entries.first.key);
     return _fragments[index];
   }
 }

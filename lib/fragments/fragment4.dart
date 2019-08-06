@@ -11,9 +11,15 @@ class Fragment4 extends StatefulWidget implements Fragment {
   State<Fragment4> createState() => _Fragment4();
 
     @override
-  String getName() {
+  String getRouteName() {
     return FRAGMENT_4;
   }
+
+  @override
+  String getTitle() {
+    return 'Fragment 4 Title';
+  }
+
 }
 class _Fragment4 extends State<Fragment4> {
   @override
