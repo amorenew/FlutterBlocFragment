@@ -50,8 +50,9 @@ class MainDrawer extends StatelessWidget {
                 style: TextStyle(color: Color(0xFF4b4b4b), fontSize: 16),
               ),
               onTap: () {
-                BlocProvider.of(context)
+                BlocProvider.of<FragmentBloc>(context)
                     .dispatch(FragmentNavigateEvent(FRAGMENT_1));
+                Navigator.of(context).pop();
               },
             ),
             const Divider(
@@ -63,8 +64,9 @@ class MainDrawer extends StatelessWidget {
                 style: TextStyle(color: Color(0xFF4b4b4b), fontSize: 16),
               ),
               onTap: () {
-                BlocProvider.of(context)
-                    .dispatch(FragmentNavigateEvent(FRAGMENT_1));
+                BlocProvider.of<FragmentBloc>(context)
+                    .dispatch(FragmentNavigateEvent(FRAGMENT_3));
+                Navigator.of(context).pop();
               },
             ),
           ],
