@@ -9,9 +9,10 @@ abstract class FragmentState extends Equatable {
 class FragmentInitialState extends FragmentState {}
 
 class FragmentCurrentState extends FragmentState {
-  FragmentCurrentState(this.index) : super(<dynamic>[index]);
+  FragmentCurrentState(this.index,{this.data}) : super(<dynamic>[index]);
 
   final int index;
+  final dynamic data;
 }
 
 class FragmentBackState extends FragmentState {

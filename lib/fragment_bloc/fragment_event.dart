@@ -8,8 +8,9 @@ abstract class FragmentEvent extends Equatable {
 
 @immutable
  class FragmentNavigateEvent extends FragmentEvent {
-  FragmentNavigateEvent(this.routeName) : super(<dynamic>[routeName]);
+  FragmentNavigateEvent(this.routeName,{this.data}) : super(<dynamic>[routeName,data]);
   final String routeName;
+  final dynamic data;
 }
 
 @immutable

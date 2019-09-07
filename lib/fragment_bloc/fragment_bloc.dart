@@ -15,7 +15,7 @@ class FragmentBloc extends Bloc<FragmentEvent, FragmentState> {
         FragmentManager().addFragment(event.routeName);
       }
       final int currentIndex =
-          FragmentManager().navigateToName(event.routeName);
+          FragmentManager().navigateToName(event.routeName,data: event.data);
       print('bloc currentIndex:$currentIndex');
       yield FragmentCurrentState(currentIndex);
     } else if (event is FragmentBackEvent) {

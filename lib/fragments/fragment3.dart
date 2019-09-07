@@ -8,7 +8,7 @@ class Fragment3 extends StatefulWidget implements Fragment {
   @override
   State<Fragment3> createState() => _Fragment3();
 
-   @override
+  @override
   String getRouteName() {
     return FRAGMENT_3;
   }
@@ -18,6 +18,16 @@ class Fragment3 extends StatefulWidget implements Fragment {
     return 'Fragment 3 Title';
   }
 
+  dynamic data;
+  @override
+  getData() {
+    return data;
+  }
+
+  @override
+  setData(dynamic data) {
+    this.data = data;
+  }
 }
 
 class _Fragment3 extends State<Fragment3> {
@@ -27,6 +37,7 @@ class _Fragment3 extends State<Fragment3> {
       child: Column(
         children: <Widget>[
           Text("_Fragment3"),
+          Text("Data id passed:${widget.data}"),
           RaisedButton(
             child: Text('Navigate to fragment 4'),
             onPressed: () => BlocProvider.of<FragmentBloc>(context)

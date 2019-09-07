@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fragment_bloc/fragment_bloc/fragment.dart';
 
 class FragmentManager {
-
   factory FragmentManager() {
     return _singleton;
   }
@@ -52,21 +51,24 @@ class FragmentManager {
     return exist;
   }
 
-  int navigateToName(String fragmentName) {
+  int navigateToName(String fragmentName, {dynamic data}) {
     int fragmentIndex = -1;
     print('manager navigateToName:$fragmentIndex');
 
     _fragments.asMap().forEach((int index, Widget value) {
       if (value is Fragment && value.getRouteName() == fragmentName) {
         fragmentIndex = index;
+        if (data != null) value.setData(data);
       } else if (value is BlocProvider &&
           value.child is Fragment &&
           (value.child as Fragment).getRouteName() == fragmentName) {
         fragmentIndex = index;
+        if (data != null) (value.child as Fragment).setData(data);
       } else if (value is MultiBlocProvider &&
           value.child is Fragment &&
           (value.child as Fragment).getRouteName() == fragmentName) {
         fragmentIndex = index;
+        if (data != null) (value.child as Fragment).setData(data);
       }
     });
     print('manager navigateToName:$fragmentIndex');
@@ -86,7 +88,6 @@ class FragmentManager {
       return Future<bool>.value(true);
     }
   }
-
 
   void setFragments(List<Widget> fragments) {
     _fragments = fragments;
